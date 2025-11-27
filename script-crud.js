@@ -24,7 +24,7 @@ function creatElementTask(tarefa) {
         button.classList.add('app_button-edit')
 
         const imgButton= document.createElement('img')
-        imgButton.setAttribute('src', '/imagens/edit.png')
+        imgButton.setAttribute('src', 'imagens/edit.png')
 
         button.append(imgButton)
 
