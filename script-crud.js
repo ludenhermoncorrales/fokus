@@ -4,6 +4,8 @@ const textArea = document.querySelector('.app__form-textarea')
 
 const listTask = [];
 
+// Creat task 
+
 btnAddTarefa.addEventListener('click', () => {
     formAddTarefa.classList.toggle('hidden')
 })
