@@ -33,11 +33,14 @@ function creatElementTask(tarefa) {
 
         button.onclick = () =>{
             const newDescription = prompt('Qual a nova da tarefa?');
-            // Altera a camada visual da tela
-            paragraph.textContent = newDescription;
-            // salva na localStorage (application) a nova descrição
-            tarefa.descricao = newDescription;
-            tuUpdateTask();
+            console.log('New description task -->', newDescription )
+            if (newDescription) {
+                // Altera a camada visual da tela
+                paragraph.textContent = newDescription;
+                // salva na localStorage (application) a nova descrição
+                tarefa.descricao = newDescription;
+                tuUpdateTask();
+            }
         }
 
         button.append(imgButton)
@@ -69,9 +72,7 @@ formAddTarefa.addEventListener('submit', (evento) => {
     tuUpdateTask();
     textArea.value = ''
     formAddTarefa.classList.add('hidden')
-
 })
-
 
 listTask.forEach(task => {
     const elementTask= creatElementTask(task)
