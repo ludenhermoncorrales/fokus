@@ -5,6 +5,10 @@ const ultask = document.querySelector('.app__section-task-list')
 
 const listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
 
+function tuUpdateTask () {
+    localStorage.setItem('fullTarefas', JSON.stringify(listTask))
+}
+
 // Creat task 
 function creatElementTask(tarefa) {
     const li= document.createElement('li')
@@ -24,12 +28,17 @@ function creatElementTask(tarefa) {
         button.textContent = 'EDITAR'
         button.classList.add('app_button-edit')
 
-        button.onclick = () =>{
-            prompt('Qual nome da tarefa?')
-        }
-
         const imgButton= document.createElement('img')
         imgButton.setAttribute('src', 'imagens/edit.png')
+
+        button.onclick = () =>{
+            const newDescription = prompt('Qual a nova da tarefa?');
+            // Altera a camada visual da tela
+            paragraph.textContent = newDescription;
+            // salva na localStorage (application) a nova descrição
+            tarefa.descricao = newDescription;
+            tuUpdateTask();
+        }
 
         button.append(imgButton)
 
@@ -57,7 +66,7 @@ formAddTarefa.addEventListener('submit', (evento) => {
     ultask.append(elementTask)
     // permite acessar um objeto e salvar as informações 
     // Utilzamos a API JSON.stringify para converter String em objeto
-    localStorage.setItem('fullTarefas', JSON.stringify(listTask))
+    tuUpdateTask();
     textArea.value = ''
     formAddTarefa.classList.add('hidden')
 
