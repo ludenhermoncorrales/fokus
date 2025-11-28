@@ -3,7 +3,11 @@ const formAddTarefa= document.querySelector('.app__form-add-task')
 const textArea = document.querySelector('.app__form-textarea')
 const ultask = document.querySelector('.app__section-task-list')
 
-const listTask = JSON.parse(localStorage.getItem('listTask')) || [];
+const listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
+
+function tuUpdateTask () {
+    localStorage.setItem('fullTarefas', JSON.stringify(listTask))
+}
 
 // Creat task 
 function creatElementTask(tarefa) {
@@ -17,14 +21,24 @@ function creatElementTask(tarefa) {
         </svg>`
 
         const paragraph= document.createElement('p') 
-        paragraph.textContent = tarefa.descicao
+        paragraph.textContent = tarefa.descricao
         paragraph.classList.add('app__section-task-list-item-description')
 
         const button= document.createElement('button')
+        button.textContent = 'EDITAR'
         button.classList.add('app_button-edit')
 
         const imgButton= document.createElement('img')
         imgButton.setAttribute('src', 'imagens/edit.png')
+
+        button.onclick = () =>{
+            const newDescription = prompt('Qual a nova da tarefa?');
+            // Altera a camada visual da tela
+            paragraph.textContent = newDescription;
+            // salva na localStorage (application) a nova descrição
+            tarefa.descricao = newDescription;
+            tuUpdateTask();
+        }
 
         button.append(imgButton)
 
@@ -44,7 +58,7 @@ formAddTarefa.addEventListener('submit', (evento) => {
     evento.preventDefault();
     // recebe o valor digitado dentro do formulario textArea
     const tarefa = {
-        descicao: textArea.value
+        descricao: textArea.value
     }
 
     listTask.push(tarefa)
@@ -52,7 +66,7 @@ formAddTarefa.addEventListener('submit', (evento) => {
     ultask.append(elementTask)
     // permite acessar um objeto e salvar as informações 
     // Utilzamos a API JSON.stringify para converter String em objeto
-    localStorage.setItem('fullTarefas', JSON.stringify(listTask))
+    tuUpdateTask();
     textArea.value = ''
     formAddTarefa.classList.add('hidden')
 
