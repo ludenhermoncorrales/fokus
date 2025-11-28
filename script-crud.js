@@ -3,7 +3,7 @@ const formAddTarefa= document.querySelector('.app__form-add-task')
 const textArea = document.querySelector('.app__form-textarea')
 const ultask = document.querySelector('.app__section-task-list')
 
-const listTask = JSON.parse(localStorage.getItem('listTask')) || [];
+const listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
 
 // Creat task 
 function creatElementTask(tarefa) {
@@ -17,11 +17,16 @@ function creatElementTask(tarefa) {
         </svg>`
 
         const paragraph= document.createElement('p') 
-        paragraph.textContent = tarefa.descicao
+        paragraph.textContent = tarefa.descricao
         paragraph.classList.add('app__section-task-list-item-description')
 
         const button= document.createElement('button')
+        button.textContent = 'EDITAR'
         button.classList.add('app_button-edit')
+
+        button.onclick = () =>{
+            prompt('Qual nome da tarefa?')
+        }
 
         const imgButton= document.createElement('img')
         imgButton.setAttribute('src', 'imagens/edit.png')
@@ -44,7 +49,7 @@ formAddTarefa.addEventListener('submit', (evento) => {
     evento.preventDefault();
     // recebe o valor digitado dentro do formulario textArea
     const tarefa = {
-        descicao: textArea.value
+        descricao: textArea.value
     }
 
     listTask.push(tarefa)
