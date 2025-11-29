@@ -3,7 +3,7 @@ const btnCancelTask = document.querySelector('.app__form-footer__button--cancel'
 const formAddTarefa = document.querySelector('.app__form-add-task')
 const textArea = document.querySelector('.app__form-textarea')
 const ultask = document.querySelector('.app__section-task-list')
-
+const paragraphDescriptionTask = document.querySelector('.app__section-active-task-description')
 
 
 
@@ -12,6 +12,7 @@ const listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
 function tuUpdateTask() {
     localStorage.setItem('fullTarefas', JSON.stringify(listTask))
 }
+let selectedTask = null;
 
 // Creat task 
 function creatElementTask(tarefa) {
@@ -36,8 +37,9 @@ function creatElementTask(tarefa) {
     imgButton.setAttribute('src', 'imagens/edit.png')
 
     button.onclick = () => {
+        // debugger
         const newDescription = prompt('Qual a nova da tarefa?');
-        console.log('New description task -->', newDescription)
+        // console.log('New description task -->', newDescription)
         if (newDescription) {
             // Altera a camada visual da tela
             paragraph.textContent = newDescription;
@@ -52,6 +54,43 @@ function creatElementTask(tarefa) {
     li.append(svg)
     li.append(paragraph)
     li.append(button)
+
+    // li escuta o click na tarefa existene após inclui com .textContent a descrição da tareda dentro da classe: app__section-active-task-description
+    // li.onclick = () => {
+    //     console.log('entrou na seleção');
+    //     debugger
+    //     paragraphDescriptionTask.textContent = tarefa.descricao
+    //     document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
+    //         element.classList.remove('app__section-task-list-item-active')
+    //     });
+
+    //     if (selectedTask == tarefa) {
+    //         paragraphDescriptionTask.textContent = ``
+    //         li.classList.remove(`app__section-task-list-item-active`)
+    //         return
+    //     }
+
+    //     selectedTask = tarefa;
+    //     li.classList.add(`app__section-task-list-item-active`)
+    // }
+
+    li.addEventListener(`click`, () => {
+        paragraphDescriptionTask.textContent = tarefa.descricao
+        document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
+            element.classList.remove('app__section-task-list-item-active')
+        });
+
+        if (selectedTask == tarefa) {
+            debugger
+            paragraphDescriptionTask.textContent = ``
+            li.classList.remove(`app__section-task-list-item-active`)
+            selectedTask = null;
+            return
+        }
+
+        selectedTask = tarefa;
+        li.classList.add(`app__section-task-list-item-active`)
+    })
 
     return li
 }
