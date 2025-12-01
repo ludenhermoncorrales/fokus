@@ -4,10 +4,11 @@ const formAddTarefa = document.querySelector('.app__form-add-task')
 const textArea = document.querySelector('.app__form-textarea')
 const ultask = document.querySelector('.app__section-task-list')
 const paragraphDescriptionTask = document.querySelector('.app__section-active-task-description')
+const btnRemoveTaskCompleted = document.querySelector('#btn-remover-concluidas')
 
 
 
-const listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
+let listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
 
 function tuUpdateTask() {
     localStorage.setItem('fullTarefas', JSON.stringify(listTask))
@@ -56,27 +57,33 @@ function creatElementTask(tarefa) {
     li.append(paragraph)
     li.append(button)
 
+    if (tarefa.complet) {
 
-    // li escuta o click na tarefa existene após inclui com .textContent a descrição da tareda dentro da classe: app__section-active-task-description
-    li.addEventListener(`click`, () => {
-        paragraphDescriptionTask.textContent = tarefa.descricao
-        document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
-            element.classList.remove('app__section-task-list-item-active')
-        });
+        li.classList.add('app__section-task-list-item-complete')
+        button.setAttribute('disabled', 'disabled')
+    } else {
+        // li escuta o click na tarefa existene após inclui com .textContent a descrição da tareda dentro da classe: app__section-active-task-description
+        li.addEventListener(`click`, () => {
+            paragraphDescriptionTask.textContent = tarefa.descricao
+            document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
+                element.classList.remove('app__section-task-list-item-active')
+            });
 
-        if (selectedTask == tarefa) {
-            // debugger
-            paragraphDescriptionTask.textContent = ``
-            li.classList.remove(`app__section-task-list-item-active`)
-            selectedTask = null;
-            liForSelectedTask = null
-            return
-        }
+            if (selectedTask == tarefa) {
+                // debugger
+                paragraphDescriptionTask.textContent = ``
+                li.classList.remove(`app__section-task-list-item-active`)
+                selectedTask = null;
+                liForSelectedTask = null
+                return
+            }
 
-        selectedTask = tarefa;
-        liForSelectedTask = li;
-        li.classList.add(`app__section-task-list-item-active`)
-    })
+            selectedTask = tarefa;
+            liForSelectedTask = li;
+            li.classList.add(`app__section-task-list-item-active`)
+        })
+    }
+
 
     return li
 }
@@ -127,12 +134,29 @@ listTask.forEach(task => {
     ultask.append(elementTask)
 });
 
-document.addEventListener('focusFinish', ()=>{
-    debugger
+document.addEventListener('focusFinish', () => {
+    // debugger
     if (selectedTask && liForSelectedTask) {
         liForSelectedTask.classList.remove('app__section-task-list-item-active')
         liForSelectedTask.classList.add('app__section-task-list-item-complete')
 
-        liForSelectedTask.querySelector('button').setAttribute('disable','disable')
+        liForSelectedTask.querySelector('button').setAttribute('disabled', 'disabled')
+
+        // Cria uma nova propriedade para lat selectedTask
+        selectedTask.complet = true
+        // Chama função atualiazar informações localStorage
+        tuUpdateTask();
     }
+})
+
+btnRemoveTaskCompleted.addEventListener('click', () => {
+    console.log('click limpar tarefas concluidas');
+    debugger
+    
+const selector = document.querySelectorAll('.app__section-task-list-item-complete');
+selector.forEach(element => {
+    element.remove();
+})
+listTask = listTask.filter(element => !element.complet)
+tuUpdateTask()
 })
