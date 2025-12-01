@@ -4,8 +4,9 @@ const formAddTarefa = document.querySelector('.app__form-add-task')
 const textArea = document.querySelector('.app__form-textarea')
 const ultask = document.querySelector('.app__section-task-list')
 const paragraphDescriptionTask = document.querySelector('.app__section-active-task-description')
-const btnRemoveTaskCompleted = document.querySelector('#btn-remover-concluidas')
 
+const btnRemoveTaskCompleted = document.querySelector('#btn-remover-concluidas')
+const btnRemoveAllTask = document.querySelector('#btn-remover-todas')
 
 
 let listTask = JSON.parse(localStorage.getItem('fullTarefas')) || [];
@@ -149,14 +150,20 @@ document.addEventListener('focusFinish', () => {
     }
 })
 
-btnRemoveTaskCompleted.addEventListener('click', () => {
-    console.log('click limpar tarefas concluidas');
-    debugger
-    
+btnRemoveTaskCompleted.addEventListener('click', () => {    
 const selector = document.querySelectorAll('.app__section-task-list-item-complete');
 selector.forEach(element => {
     element.remove();
 })
 listTask = listTask.filter(element => !element.complet)
 tuUpdateTask()
+})
+
+btnRemoveAllTask.addEventListener('click', () => {
+    const selector = document.querySelectorAll('.app__section-task-list-item');
+    selector.forEach(element => {
+        element.remove();
+    })
+    listTask = [];
+    tuUpdateTask();
 })
