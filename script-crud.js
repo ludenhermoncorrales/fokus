@@ -13,6 +13,7 @@ function tuUpdateTask() {
     localStorage.setItem('fullTarefas', JSON.stringify(listTask))
 }
 let selectedTask = null;
+let liForSelectedTask = null;
 
 // Creat task 
 function creatElementTask(tarefa) {
@@ -55,25 +56,8 @@ function creatElementTask(tarefa) {
     li.append(paragraph)
     li.append(button)
 
+
     // li escuta o click na tarefa existene após inclui com .textContent a descrição da tareda dentro da classe: app__section-active-task-description
-    // li.onclick = () => {
-    //     console.log('entrou na seleção');
-    //     debugger
-    //     paragraphDescriptionTask.textContent = tarefa.descricao
-    //     document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
-    //         element.classList.remove('app__section-task-list-item-active')
-    //     });
-
-    //     if (selectedTask == tarefa) {
-    //         paragraphDescriptionTask.textContent = ``
-    //         li.classList.remove(`app__section-task-list-item-active`)
-    //         return
-    //     }
-
-    //     selectedTask = tarefa;
-    //     li.classList.add(`app__section-task-list-item-active`)
-    // }
-
     li.addEventListener(`click`, () => {
         paragraphDescriptionTask.textContent = tarefa.descricao
         document.querySelectorAll('.app__section-task-list-item-active').forEach(element => {
@@ -81,14 +65,16 @@ function creatElementTask(tarefa) {
         });
 
         if (selectedTask == tarefa) {
-            debugger
+            // debugger
             paragraphDescriptionTask.textContent = ``
             li.classList.remove(`app__section-task-list-item-active`)
             selectedTask = null;
+            liForSelectedTask = null
             return
         }
 
         selectedTask = tarefa;
+        liForSelectedTask = li;
         li.classList.add(`app__section-task-list-item-active`)
     })
 
@@ -118,9 +104,6 @@ btnCancelTask.addEventListener('click', clearTextArea)
 // ------------------------------------------------
 
 
-
-
-
 formAddTarefa.addEventListener('submit', (evento) => {
     // previne o comportamento padrão da pagina preventDefault();
     evento.preventDefault();
@@ -143,3 +126,13 @@ listTask.forEach(task => {
     const elementTask = creatElementTask(task)
     ultask.append(elementTask)
 });
+
+document.addEventListener('focusFinish', ()=>{
+    debugger
+    if (selectedTask && liForSelectedTask) {
+        liForSelectedTask.classList.remove('app__section-task-list-item-active')
+        liForSelectedTask.classList.add('app__section-task-list-item-complete')
+
+        liForSelectedTask.querySelector('button').setAttribute('disable','disable')
+    }
+})

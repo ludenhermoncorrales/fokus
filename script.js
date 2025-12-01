@@ -16,7 +16,7 @@ const audioPlay = new Audio('/sons/play.wav');
 const audioPausa = new Audio('/sons/pause.mp3');
 const audioTempoFinalizado = new Audio('./sons/beep.mp3')
 
-let tempoDecorridoEmSegundos = 30
+let tempoDecorridoEmSegundos = 8
 let intervaloId = null
 
 musica.loop = true
@@ -30,7 +30,7 @@ musicaFocoInput.addEventListener('change', () => {
 })
 
 focoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 30
+    tempoDecorridoEmSegundos = 20
     alterarContexto('foco')
     focoBt.classList.add('active')
 })
@@ -77,8 +77,20 @@ function alterarContexto(contexto) {
 
 const contagemRegressiva = () => {
     if(tempoDecorridoEmSegundos <= 0){
-        audioTempoFinalizado.play()
+        // audioTempoFinalizado.play()
         alert('Tempo finalizado!')
+
+        //----->> Brodcast de um evento <<-----
+        // avalia se data-contexto é igual a foco e incrementa a dentro de activeFocus
+        const activeFocus = html.getAttribute('data-contexto') == 'foco'
+        //  se activeFocus for true
+        if (activeFocus){
+            // CustomEvent cria uma nova instancia desse evento chamada focusFinish e incrementa dentro de event
+            const event = new CustomEvent ('focusFinish');
+            //  dispatchEvent (dispara esse evento)
+            document.dispatchEvent(event)
+        }
+
         zerar()
         return
     }
